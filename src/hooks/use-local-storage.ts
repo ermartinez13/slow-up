@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useSyncExternalStore } from "react";
 
-type SetItemCallback<T> = (v?: T | ((prev: T) => T)) => void;
+export type SetItemCallback<T> = (v?: T | ((prev: T) => T)) => void;
 
 /**
  * caveat: if item is removed from store (either externally of via app)

@@ -40,6 +40,9 @@ main {
   flex-basis: 15rem;
   flex-grow: 0;
   flex-shrink: 0;
+  max-height: 48rem;
+  overflow-y: auto;
+  position: relative;
 }
 
 .time-display {
@@ -74,4 +77,17 @@ button {
   display: grid;
   row-gap: 2rem;
   place-content: center;
+}
+
+.hour {
+  border: 1px dashed gray;
+  height: 8rem;
+}
+
+.event {
+  background-color: darkmagenta;
+  opacity: 0.9;
+  width: 100%;
+  position: absolute;
+  overflow-y: hidden;
 }

@@ -1,19 +1,16 @@
+import { useOutletContext } from "react-router-dom";
 import { NotificationsPermissionBtn } from "../components/NotificationsPermissionBtn";
 import { Stopwatch } from "../components/Stopwatch";
 import { TimeEntries } from "../components/TimeEntries";
 import { WorkUnit } from "../components/Timer/Timer.models";
 import { TotalsDisplay } from "../components/Timer/TotalsDisplay";
 import { getEntryIndex, getSecondsSpentToday } from "../helpers";
-import { useLocalStorage } from "../hooks/use-local-storage";
+import { SetItemCallback } from "../hooks/use-local-storage";
 import { usePermissions } from "../hooks/use-permissions";
 
-const INITIAL_ENTRIES: WorkUnit[] = [];
-
 export function StopwatchPage() {
-  const [entries, setEntries] = useLocalStorage<WorkUnit[]>(
-    "entries",
-    INITIAL_ENTRIES
-  );
+  const [entries, setEntries] =
+    useOutletContext<[WorkUnit[], SetItemCallback<WorkUnit[]>]>();
   const notificationsPermission = usePermissions("notifications");
   const secondsSpentToday = getSecondsSpentToday(entries);
 
