@@ -1,30 +1,29 @@
-import React from "react";
-
-import { ActionButtons } from "./ActionButtons";
-import { TimeDisplay } from "./TimeDisplay";
-import { notify } from "../../helpers";
 import {
   PartialEntry,
   TimerEvents,
   TimerStatus,
   WorkUnit,
-} from "./Timer.models";
+} from "../Timer/Timer.models";
+import { DEFAULT_ENTRY } from "../Timer/Timer.constants";
+import { notify } from "../../helpers";
+import { ActionButtons } from "../Timer/ActionButtons";
 import { ControlledTextArea } from "../ControlledTextArea";
-import { DEFAULT_ENTRY, DEFAULT_TIME } from "./Timer.constants";
+import React from "react";
 import { useTick } from "../../hooks/use-tick";
 
 interface Props {
   addEntry: (timeEntry: WorkUnit) => void;
 }
 
-export function Timer({ addEntry }: Props) {
+export function Stopwatch({ addEntry }: Props) {
   const [status, setStatus] = React.useState<TimerStatus>(TimerStatus.OFF);
-  const { ticks: timeSpent, workerRef, resetTicks } = useTick();
-  const [timeBudget, setTimeBudget] = React.useState(DEFAULT_TIME);
   const [partialEntry, setPartialEntry] = React.useState<PartialEntry>({
     ...DEFAULT_ENTRY,
   });
-  const secondsLeft = timeBudget - timeSpent;
+  const { ticks: timeSpent, workerRef, resetTicks } = useTick();
+  const hours = Math.floor(timeSpent / 3600);
+  const minutes = Math.floor(timeSpent / 60) % 60;
+  const seconds = timeSpent % 60;
 
   const start = () => {
     if (status === TimerStatus.ON) return;
@@ -66,18 +65,15 @@ export function Timer({ addEntry }: Props) {
     }));
   };
 
-  if (timeSpent >= timeBudget && status !== "off") {
-    stop();
-  }
-
   return (
     <div className="timer">
-      <TimeDisplay
-        secondsLeft={secondsLeft}
-        setTimeBudget={setTimeBudget}
-        key={secondsLeft}
-        status={status}
-      />
+      <div>
+        <span>{hours}</span>
+        <span>:</span>
+        <span>{minutes}</span>
+        <span>:</span>
+        <span>{seconds}</span>
+      </div>
       <ActionButtons start={start} pause={pause} stop={stop} status={status} />
       <ControlledTextArea
         content={partialEntry.description}
