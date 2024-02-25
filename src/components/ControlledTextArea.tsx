@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React from "react";
 
 interface Props {
   content: string;
@@ -6,11 +6,13 @@ interface Props {
 }
 
 export function ControlledTextArea({ content, setContent }: Props) {
-  const [localContent, setLocalContent] = useState<string>(content);
+  const [localContent, setLocalContent] = React.useState<string>(content);
 
   return (
     <textarea
-      rows={3}
+      className="content"
+      rows={6}
+      cols={40}
       value={localContent}
       onChange={(e) => setLocalContent(e.target.value)}
       onBlur={() => setContent(localContent)}

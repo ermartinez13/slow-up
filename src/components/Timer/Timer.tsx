@@ -9,21 +9,19 @@ import {
   TimerStatus,
   WorkUnit,
 } from "./Timer.models";
-import { ControlledTextArea } from "../ControlledTextArea";
 import { DEFAULT_ENTRY, DEFAULT_TIME } from "./Timer.constants";
 import { useTick } from "../../hooks/use-tick";
 
 interface Props {
   addEntry: (timeEntry: WorkUnit) => void;
+  setPartialEntry: React.Dispatch<React.SetStateAction<PartialEntry>>;
+  partialEntry: PartialEntry;
 }
 
-export function Timer({ addEntry }: Props) {
+export function Timer({ addEntry, setPartialEntry, partialEntry }: Props) {
   const [status, setStatus] = React.useState<TimerStatus>(TimerStatus.OFF);
   const { ticks: timeSpent, workerRef, resetTicks } = useTick();
   const [timeBudget, setTimeBudget] = React.useState(DEFAULT_TIME);
-  const [partialEntry, setPartialEntry] = React.useState<PartialEntry>({
-    ...DEFAULT_ENTRY,
-  });
   const secondsLeft = timeBudget - timeSpent;
 
   const start = () => {
@@ -59,13 +57,6 @@ export function Timer({ addEntry }: Props) {
     setStatus(TimerStatus.PAUSED);
   };
 
-  const setContent = (content: string) => {
-    setPartialEntry((prev) => ({
-      ...prev,
-      description: content,
-    }));
-  };
-
   if (timeSpent >= timeBudget && status !== "off") {
     stop();
   }
@@ -79,11 +70,6 @@ export function Timer({ addEntry }: Props) {
         status={status}
       />
       <ActionButtons start={start} pause={pause} stop={stop} status={status} />
-      <ControlledTextArea
-        content={partialEntry.description}
-        setContent={setContent}
-        key={partialEntry.description}
-      />
     </div>
   );
 }

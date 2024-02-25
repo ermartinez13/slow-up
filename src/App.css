@@ -8,6 +8,7 @@ main {
   height: 100%;
   width: 100%;
   column-gap: 2rem;
+  background-color: #242222;
 }
 
 .sidebar {
@@ -16,6 +17,19 @@ main {
   flex-grow: 0;
   flex-shrink: 0;
   flex-basis: 10rem;
+  background-color: #373636;
+}
+
+.sidebar a {
+  padding-left: 1rem;
+}
+
+.nav-section-label {
+  text-transform: uppercase;
+}
+
+.nav-section-label:nth-of-type(2) {
+  padding-top: 2rem;
 }
 
 .navigation {
@@ -32,6 +46,8 @@ main {
 }
 
 .tool-wrapper {
+  display: grid;
+  place-content: center;
   min-width: 20rem;
   flex-grow: 1;
 }
@@ -43,6 +59,7 @@ main {
   max-height: 48rem;
   overflow-y: auto;
   position: relative;
+  background-color: #373636;
 }
 
 .time-display {
@@ -90,4 +107,15 @@ button {
   width: 100%;
   position: absolute;
   overflow-y: hidden;
+}
+
+.content {
+  border-radius: 10px;
+}
+
+.page {
+  display: grid;
+  grid-template-rows: 10rem 20rem max-content;
+  height: 100%;
+  width: max-content;
 }

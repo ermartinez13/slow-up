@@ -1,3 +1,5 @@
+import React from "react";
+
 import {
   PartialEntry,
   TimerEvents,
@@ -7,19 +9,16 @@ import {
 import { DEFAULT_ENTRY } from "../Timer/Timer.constants";
 import { notify } from "../../helpers";
 import { ActionButtons } from "../Timer/ActionButtons";
-import { ControlledTextArea } from "../ControlledTextArea";
-import React from "react";
 import { useTick } from "../../hooks/use-tick";
 
 interface Props {
   addEntry: (timeEntry: WorkUnit) => void;
+  setPartialEntry: React.Dispatch<React.SetStateAction<PartialEntry>>;
+  partialEntry: PartialEntry;
 }
 
-export function Stopwatch({ addEntry }: Props) {
+export function Stopwatch({ addEntry, setPartialEntry, partialEntry }: Props) {
   const [status, setStatus] = React.useState<TimerStatus>(TimerStatus.OFF);
-  const [partialEntry, setPartialEntry] = React.useState<PartialEntry>({
-    ...DEFAULT_ENTRY,
-  });
   const { ticks: timeSpent, workerRef, resetTicks } = useTick();
   const hours = Math.floor(timeSpent / 3600);
   const minutes = Math.floor(timeSpent / 60) % 60;
@@ -57,14 +56,6 @@ export function Stopwatch({ addEntry }: Props) {
     workerRef.current?.postMessage({ type: TimerEvents.PAUSE });
     setStatus(TimerStatus.PAUSED);
   };
-
-  const setContent = (content: string) => {
-    setPartialEntry((prev) => ({
-      ...prev,
-      description: content,
-    }));
-  };
-
   return (
     <div className="timer">
       <div>
@@ -75,11 +66,6 @@ export function Stopwatch({ addEntry }: Props) {
         <span>{seconds}</span>
       </div>
       <ActionButtons start={start} pause={pause} stop={stop} status={status} />
-      <ControlledTextArea
-        content={partialEntry.description}
-        setContent={setContent}
-        key={partialEntry.description}
-      />
     </div>
   );
 }

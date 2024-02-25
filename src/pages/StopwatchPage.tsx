@@ -1,42 +1,41 @@
 import { useOutletContext } from "react-router-dom";
-import { NotificationsPermissionBtn } from "../components/NotificationsPermissionBtn";
+
 import { Stopwatch } from "../components/Stopwatch";
-import { TimeEntries } from "../components/TimeEntries";
-import { WorkUnit } from "../components/Timer/Timer.models";
-import { TotalsDisplay } from "../components/Timer/TotalsDisplay";
-import { getEntryIndex, getSecondsSpentToday } from "../helpers";
+import { PartialEntry, WorkUnit } from "../components/Timer/Timer.models";
 import { SetItemCallback } from "../hooks/use-local-storage";
-import { usePermissions } from "../hooks/use-permissions";
+import { DEFAULT_ENTRY } from "../components/Timer/Timer.constants";
+import React from "react";
+import { ControlledTextArea } from "../components/ControlledTextArea";
 
 export function StopwatchPage() {
   const [entries, setEntries] =
     useOutletContext<[WorkUnit[], SetItemCallback<WorkUnit[]>]>();
-  const notificationsPermission = usePermissions("notifications");
-  const secondsSpentToday = getSecondsSpentToday(entries);
+  const [partialEntry, setPartialEntry] = React.useState<PartialEntry>({
+    ...DEFAULT_ENTRY,
+  });
 
   const addEntry = (entry: WorkUnit) => {
     setEntries(entries.concat(entry));
   };
 
-  const updateEntry = (entry: WorkUnit) => {
-    const nextEntries = window.structuredClone(entries);
-    const targetIdx = getEntryIndex(entry, nextEntries);
-    Object.assign(nextEntries[targetIdx], entry);
-    setEntries(nextEntries);
+  const setContent = (content: string) => {
+    setPartialEntry((prev) => ({
+      ...prev,
+      description: content,
+    }));
   };
-
   return (
     <div>
-      <section>
-        {"Notification" in window && notificationsPermission === "prompt" ? (
-          <NotificationsPermissionBtn />
-        ) : null}
-        <Stopwatch addEntry={addEntry} />
-      </section>
-      <section>
-        <TotalsDisplay totalSeconds={secondsSpentToday} />
-        <TimeEntries entries={entries} updateEntry={updateEntry} />
-      </section>
+      <Stopwatch
+        addEntry={addEntry}
+        setPartialEntry={setPartialEntry}
+        partialEntry={partialEntry}
+      />
+      <ControlledTextArea
+        content={partialEntry.description}
+        setContent={setContent}
+        key={partialEntry.description}
+      />
     </div>
   );
 }

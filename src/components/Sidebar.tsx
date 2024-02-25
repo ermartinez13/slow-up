@@ -5,9 +5,13 @@ export function Sidebar() {
     <div className="sidebar">
       <p>Comming Soon...</p>
       <div className="navigation">
-        <span>Tools</span>
+        <span className="nav-section-label">Tools</span>
         <Link to="/tools/timer">Timer</Link>
         <Link to="/tools/stopwatch">Stopwatch</Link>
+        <Link to="/tools/pomodoro">Pomodoro</Link>
+        <span className="nav-section-label">Views</span>
+        <Link to="#">Weekly</Link>
+        <Link to="#">Monthly</Link>
       </div>
     </div>
   );
